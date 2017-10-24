@@ -5,7 +5,6 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,16 +12,16 @@ import java.util.logging.Logger;
 public class MulticastManager implements Runnable
 {
    private final String IP;
-   private final int PORT;
+   private final int SOCKET_NBR;
    private MulticastSocket socket;
 
    public MulticastManager(String ip, int port)
    {
       this.IP = ip;
-      this.PORT = port;
+      this.SOCKET_NBR = port;
       try
       {
-         socket = new MulticastSocket(this.PORT);
+         socket = new MulticastSocket(this.SOCKET_NBR);
       } catch (IOException ex)
       {
          Logger.getLogger(MulticastManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -34,18 +33,16 @@ public class MulticastManager implements Runnable
       return IP;
    }
 
-   public int getPORT()
+   public int getSOCKET_NBR()
    {
-      return PORT;
+      return SOCKET_NBR;
    }
 
     @Override
     public void run() {
         byte id             = 0x00;
         byte SYNC           = 0x01,
-             FOLLOW_UP      = 0x02,
-             DELAY_REQUEST  = 0X03,
-             DELAY_RESPONSE = 0X04;
+             FOLLOW_UP      = 0x02;
         int  K              = 2;
         while (true) {
             id++;
@@ -58,7 +55,7 @@ public class MulticastManager implements Runnable
                 group = InetAddress.getByName(IP);
                 
                 //envoi du message SYNC
-                DatagramPacket packet = new DatagramPacket(msg, msg.length, group, PORT);
+                DatagramPacket packet = new DatagramPacket(msg, msg.length, group, SOCKET_NBR);
                 socket.send(packet);
                 System.out.println("SYNC sent!");
                 
@@ -76,7 +73,7 @@ public class MulticastManager implements Runnable
                     (byte)(syncSent)
                 };
                 
-                packet = new DatagramPacket(msg, msg.length, group, PORT);
+                packet = new DatagramPacket(msg, msg.length, group, SOCKET_NBR);
                 socket.send(packet);
                 System.out.println("FOLLOW_UP sent!");
 
