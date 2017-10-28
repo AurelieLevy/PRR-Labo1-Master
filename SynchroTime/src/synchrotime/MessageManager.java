@@ -17,10 +17,9 @@ public class MessageManager implements Runnable
    private boolean running;
    
    //le port du master doit etre fixe, pas celui des esclaves
-   public MessageManager(int port, String name) throws SocketException
+   public MessageManager(int port) throws SocketException
    {
       this.socketNbr = port;
-      this.name = name;
       socket = new DatagramSocket(port);
       this.running = true;
    }
@@ -36,7 +35,7 @@ public class MessageManager implements Runnable
             byte[] buffer = new byte[256];
             InetAddress address;
             try
-            {         
+            {        
                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                System.out.println("Recieving...");
 
@@ -81,14 +80,10 @@ public class MessageManager implements Runnable
                   System.out.println(DELAY_RESPONSE + " sent!");
                }
 
-            } catch (UnknownHostException ex)
-            {
-               Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
-               //TODO
             } catch (IOException ex)
             {
                Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
-               //TODO
+               //TODO recieve et send
             }
         }
       

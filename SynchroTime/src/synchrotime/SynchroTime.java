@@ -15,7 +15,7 @@ public class SynchroTime
       try
       {
         Thread multicast = new Thread(new MulticastManager("239.10.10.1", 2223));
-        Thread communication = new Thread(new MessageManager(2222, "MSI"));
+        Thread communication = new Thread(new MessageManager(2222));
          
         multicast.start();
         communication.start();
@@ -25,18 +25,6 @@ public class SynchroTime
          Logger.getLogger(SynchroTime.class.getName()).log(Level.SEVERE, null, ex);
          System.out.println("Thread not created");
       }
-      
-      /*
-      Thread multicast = new Thread(new MulticastManager("239.10.10.1", 2223));
-      multicast.start();
-      try
-      {
-         multicast.join();
-      } catch (InterruptedException ex)
-      {
-         Logger.getLogger(SynchroTime.class.getName()).log(Level.SEVERE, null, ex);
-      }
-*/
    }
    
 }
