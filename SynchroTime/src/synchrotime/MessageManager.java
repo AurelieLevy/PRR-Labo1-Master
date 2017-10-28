@@ -16,6 +16,7 @@ public class MessageManager implements Runnable
    private DatagramSocket socket;
    private boolean running;
    
+   //le port du master doit etre fixe, pas celui des esclaves
    public MessageManager(int port, String name) throws SocketException
    {
       this.socketNbr = port;
@@ -51,7 +52,17 @@ public class MessageManager implements Runnable
 
                if (recievedMessage[0] == DELAY_REQUEST)
                {
-                   buffer = new byte[] 
+                  buffer = new byte[10];
+                  buffer[0] = DELAY_RESPONSE;
+                  buffer[1] = recievedMessage[1];
+                  
+                  byte[] send = Utils.getTimeByByteTab(messageTime);
+
+                  for(int i = 0; i < send.length; i++){
+                     buffer[i+2] = send[i];
+                  }
+                  
+                   /*buffer = new byte[] 
                    {
                        DELAY_RESPONSE,
                        recievedMessage[1],
@@ -63,7 +74,7 @@ public class MessageManager implements Runnable
                       (byte)(messageTime >> 8),
                       (byte)(messageTime >> 4),
                       (byte)(messageTime)
-                   };
+                   };*/
 
                   packet = new DatagramPacket(buffer, buffer.length, address, socketNbr);
                   socket.send(packet); 
