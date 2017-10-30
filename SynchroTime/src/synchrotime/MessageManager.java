@@ -34,6 +34,7 @@ public class MessageManager implements Runnable
         {
             byte[] buffer = new byte[256];
             InetAddress address;
+            System.out.println("MAAAAAAAAAAAAAASTER");
             try
             {        
                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
@@ -48,9 +49,10 @@ public class MessageManager implements Runnable
                address = packet.getAddress();
                name = address.getHostName();
                socketNbr = packet.getPort();
-
+               System.out.println("recievedMessage: " + recievedMessage[0]);
                if (recievedMessage[0] == DELAY_REQUEST)
                {
+                  System.out.println("DELAY REQUEST RECIEVED");
                   buffer = new byte[10];
                   buffer[0] = DELAY_RESPONSE;
                   buffer[1] = recievedMessage[1];

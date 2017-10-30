@@ -53,8 +53,8 @@ public class MulticastManager implements Runnable {
             packet = new DatagramPacket(msg, msg.length, group, SOCKET_NBR);
             long syncSent = System.currentTimeMillis();
             socket.send(packet);
-            System.out.println("SYNC sent!");
-            System.out.println("time in master sended " + syncSent);
+            //System.out.println("SYNC sent!");
+            //System.out.println("time in master sended " + syncSent);
 
             //envoi du message FOLLOW_UP
             msg = new byte[10];
@@ -87,7 +87,7 @@ public class MulticastManager implements Runnable {
 
             packet = new DatagramPacket(msg, msg.length, group, SOCKET_NBR);
             socket.send(packet);
-            System.out.println("FOLLOW_UP sent!");
+            //System.out.println("FOLLOW_UP sent!");
             //attente
             TimeUnit.SECONDS.sleep(K);
 
