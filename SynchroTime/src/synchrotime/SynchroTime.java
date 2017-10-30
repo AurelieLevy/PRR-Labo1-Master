@@ -1,3 +1,10 @@
+/**
+ * Fichier: SyncroTime.java
+ * Auteurs: Nadir Benallal, Aurelie Levy
+ * Creation: Octobre 2017
+ * But: Gestion principale du maitre
+ * Lance les deux threads (multicast et point a point)
+ */
 package synchrotime;
 
 import java.net.SocketException;
@@ -6,13 +13,10 @@ import java.util.logging.Logger;
 
 public class SynchroTime {
 
-   /**
-    * @param args the command line arguments
-    */
    public static void main(String[] args) {
       try {
-         Thread multicast = new Thread(new MulticastManager("239.10.10.1", 2223));
-         Thread communication = new Thread(new MessageManager(2222));
+         Thread multicast = new Thread(new MulticastManager(Utils.getAdressMulticast(), Utils.getPortMulticast()));
+         Thread communication = new Thread(new MessageManager(Utils.getPortPointToPoint()));
 
          multicast.start();
          communication.start();
