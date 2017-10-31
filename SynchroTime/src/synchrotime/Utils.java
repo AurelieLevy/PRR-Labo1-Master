@@ -3,7 +3,8 @@
  * Auteurs: Nadir Benallal
  * Creation: Octobre 2017
  * But: Configuration du maitre
- * ATTENTION: doit correspondre a celle des esclaves!!!!
+ * ATTENTION: Les valeurs des variables de cette classe doivent
+ * correspondre a celles des esclaves!!!!
  */
 package synchrotime;
 

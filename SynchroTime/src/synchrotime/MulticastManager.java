@@ -34,7 +34,7 @@ public class MulticastManager implements Runnable {
       this.PORT = port;
       this.runningMulticast = true;
       try {
-         socket = new MulticastSocket(this.PORT);
+         this.socket = new MulticastSocket(this.PORT);
       } catch (IOException ex) {
          Logger.getLogger(MulticastManager.class.getName()).log(Level.SEVERE, null, ex);
          System.err.println("Problem while creating socket");

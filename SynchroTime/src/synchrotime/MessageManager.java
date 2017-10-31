@@ -19,8 +19,7 @@ import java.util.logging.Logger;
 
 public class MessageManager implements Runnable {
 
-   private int socketNbr;
-   //private String name;
+   private int port;
    private final DatagramSocket socket;
    private boolean runningPtToPt;
 
@@ -30,7 +29,7 @@ public class MessageManager implements Runnable {
     * @throws SocketException  si le datagramSocket n'a pas pu etre cree
     */
    public MessageManager(int port) throws SocketException {
-      this.socketNbr = port;
+      this.port = port;
       this.socket = new DatagramSocket(port);
       this.runningPtToPt = true;
    }
@@ -49,16 +48,16 @@ public class MessageManager implements Runnable {
          try {
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
             socket.receive(packet);
+            long messageTime = System.currentTimeMillis();
             byte[] recievedMessage = packet.getData();
 
-            long messageTime = System.currentTimeMillis();
 
             address = packet.getAddress();
-            socketNbr = packet.getPort();
+            port = packet.getPort();
             
             //si le message recu est un delay_request on continue le traitement
             if (recievedMessage[0] == Utils.getDelayRequest()) {
-               System.out.println("delay request recieved");
+               //System.out.println("delay request recieved");
                buffer = new byte[10]; //remise a zero du buffer pour le nouvel envoi
                buffer[0] = Utils.getDelayResponse();
                buffer[1] = recievedMessage[1];
@@ -70,9 +69,9 @@ public class MessageManager implements Runnable {
                }
                
                //on envoie la reponse (delay_response)
-               packet = new DatagramPacket(buffer, buffer.length, address, socketNbr);
+               packet = new DatagramPacket(buffer, buffer.length, address, port);
                socket.send(packet);
-               System.out.println("delay response sent!");
+               //System.out.println("delay response sent!");
             }
 
          } catch (IOException ex) {
