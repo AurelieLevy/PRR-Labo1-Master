@@ -23,8 +23,7 @@ public class SynchroTime {
 
       } catch (SocketException ex) {
          Logger.getLogger(SynchroTime.class.getName()).log(Level.SEVERE, null, ex);
-         System.out.println("Thread not created");
+         System.err.println("Thread not created");
       }
    }
-
 }

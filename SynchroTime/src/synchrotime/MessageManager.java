@@ -24,10 +24,14 @@ public class MessageManager implements Runnable {
    private final DatagramSocket socket;
    private boolean runningPtToPt;
 
-                                                //le port du master doit etre fixe, pas celui des esclaves
+   /**
+    * Constructeur du manager pour le point a point
+    * @param port 
+    * @throws SocketException  si le datagramSocket n'a pas pu etre cree
+    */
    public MessageManager(int port) throws SocketException {
       this.socketNbr = port;
-      socket = new DatagramSocket(port);
+      this.socket = new DatagramSocket(port);
       this.runningPtToPt = true;
    }
 
@@ -38,34 +42,34 @@ public class MessageManager implements Runnable {
    public void run() {
 
 
-      while (runningPtToPt) {
+      while (runningPtToPt) { //tant que le pt a pt fonctionne
          byte[] buffer = new byte[10];
          InetAddress address;
          
          try {
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-            //System.out.println("Recieving...");
-
             socket.receive(packet);
             byte[] recievedMessage = packet.getData();
 
             long messageTime = System.currentTimeMillis();
 
             address = packet.getAddress();
-            //name = address.getHostName();
             socketNbr = packet.getPort();
+            
+            //si le message recu est un delay_request on continue le traitement
             if (recievedMessage[0] == Utils.getDelayRequest()) {
                System.out.println("delay request recieved");
                buffer = new byte[10]; //remise a zero du buffer pour le nouvel envoi
                buffer[0] = Utils.getDelayResponse();
                buffer[1] = recievedMessage[1];
 
+               //on transforme le temps pour le mettre dans un tableau de bytes
                byte[] send = Utils.getTimeByByteTab(messageTime);
-
                for (int i = 0; i < send.length; i++) {
                   buffer[i + 2] = send[i];
                }
                
+               //on envoie la reponse (delay_response)
                packet = new DatagramPacket(buffer, buffer.length, address, socketNbr);
                socket.send(packet);
                System.out.println("delay response sent!");
@@ -73,6 +77,7 @@ public class MessageManager implements Runnable {
 
          } catch (IOException ex) {
             Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Problem while recieving or sending packet");            
                                                                                                 //TODO recieve et send
          }
       }
