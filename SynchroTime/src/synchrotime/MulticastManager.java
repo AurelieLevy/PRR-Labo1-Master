@@ -26,6 +26,7 @@ public class MulticastManager implements Runnable {
 
    /**
     * Constructeur du manager multicast
+    *
     * @param ip ip a utiliser
     * @param port port a utiliser
     */
@@ -43,6 +44,7 @@ public class MulticastManager implements Runnable {
 
    /**
     * Permet la recuperation de l'ip
+    *
     * @return une string contenant l'ip
     */
    public String getIP() {
@@ -51,6 +53,7 @@ public class MulticastManager implements Runnable {
 
    /**
     * Permet d'obtenir le port
+    *
     * @return le port en int
     */
    public int getPORT() {
@@ -59,17 +62,17 @@ public class MulticastManager implements Runnable {
 
    /*
    Run du multicast du maitre
-   */
+    */
    @Override
    public void run() {
       byte id = 0x00; //id du message en byte
       InetAddress group;
-      
+
       try {
          //on rejoint le groupe multicast
          group = InetAddress.getByName(IP);
          socket.joinGroup(group);
-         
+
          DatagramPacket packet;
 
          while (runningMulticast) { //tant que le multicast a lieu
@@ -93,7 +96,7 @@ public class MulticastManager implements Runnable {
             for (int i = 0; i < send.length; i++) {
                msg[i + 2] = send[i];
             }
-            
+
             packet = new DatagramPacket(msg, msg.length, group, PORT);
             socket.send(packet);
             System.out.println("FOLLOW_UP sent!");
@@ -105,15 +108,12 @@ public class MulticastManager implements Runnable {
       } catch (UnknownHostException ex) {
          Logger.getLogger(MulticastManager.class.getName()).log(Level.SEVERE, null, ex);
          System.err.println("Problem while getting group by ip");
-//TODO
       } catch (IOException ex) {
          Logger.getLogger(MulticastManager.class.getName()).log(Level.SEVERE, null, ex);
          System.err.println("Problem while joining group or sending packet");
-//TODO
       } catch (InterruptedException ex) {
          Logger.getLogger(MulticastManager.class.getName()).log(Level.SEVERE, null, ex);
          System.err.println("Problem while waiting k sec");
-//TODO
       }
    }
 
@@ -126,6 +126,7 @@ public class MulticastManager implements Runnable {
 
    /**
     * Permet de savoir si le multicast est en fonctionnement
+    *
     * @return true si en marche, false sinon
     */
    public boolean isRunning() {

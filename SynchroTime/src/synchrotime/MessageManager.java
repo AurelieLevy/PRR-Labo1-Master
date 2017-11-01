@@ -6,7 +6,6 @@
  * Le maitre attend la reception d'un delay request puis envoi un message
  * delay response contenant l'heure a laquelle il a recu la requete
  */
-
 package synchrotime;
 
 import java.io.IOException;
@@ -25,8 +24,9 @@ public class MessageManager implements Runnable {
 
    /**
     * Constructeur du manager pour le point a point
-    * @param port 
-    * @throws SocketException  si le datagramSocket n'a pas pu etre cree
+    *
+    * @param port
+    * @throws SocketException si le datagramSocket n'a pas pu etre cree
     */
    public MessageManager(int port) throws SocketException {
       this.port = port;
@@ -40,21 +40,20 @@ public class MessageManager implements Runnable {
    @Override
    public void run() {
 
-
       while (runningPtToPt) { //tant que le pt a pt fonctionne
          byte[] buffer = new byte[10];
          InetAddress address;
-         
+
          try {
+            //Reception d'un message
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
             socket.receive(packet);
             long messageTime = System.currentTimeMillis();
             byte[] recievedMessage = packet.getData();
 
-
             address = packet.getAddress();
             port = packet.getPort();
-            
+
             //si le message recu est un delay_request on continue le traitement
             if (recievedMessage[0] == Utils.getDelayRequest()) {
                //System.out.println("delay request recieved");
@@ -67,7 +66,7 @@ public class MessageManager implements Runnable {
                for (int i = 0; i < send.length; i++) {
                   buffer[i + 2] = send[i];
                }
-               
+
                //on envoie la reponse (delay_response)
                packet = new DatagramPacket(buffer, buffer.length, address, port);
                socket.send(packet);
@@ -76,17 +75,24 @@ public class MessageManager implements Runnable {
 
          } catch (IOException ex) {
             Logger.getLogger(MessageManager.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("Problem while recieving or sending packet");            
-                                                                                                //TODO recieve et send
+            System.err.println("Problem while recieving or sending packet");
          }
       }
       socket.close();
    }
 
+   /**
+    * Permet d'arreter le multicast
+    */
    public void stop() {
       runningPtToPt = false;
    }
 
+   /**
+    * Permet de savoir ou en est le multicast
+    *
+    * @return true si en marche, false sinon
+    */
    public boolean isRunningPtToPt() {
       return runningPtToPt;
    }

@@ -61,6 +61,7 @@ public class Utils {
 
    /**
     * Permet d'obtenir la variable k determinant l'attente
+    *
     * @return int
     */
    public static int getK() {
@@ -69,6 +70,7 @@ public class Utils {
 
    /**
     * Permet d'obtenir le port du multicast
+    *
     * @return le port multicast
     */
    public static int getPortMulticast() {
@@ -77,6 +79,7 @@ public class Utils {
 
    /**
     * Permet d'obtenir le port du point a point
+    *
     * @return le port point a point
     */
    public static int getPortPointToPoint() {
@@ -85,6 +88,7 @@ public class Utils {
 
    /**
     * Permet de recuperer l'adresse multicast
+    *
     * @return l'adresse de multicast
     */
    public static String getAdressMulticast() {
@@ -92,8 +96,9 @@ public class Utils {
    }
 
    /**
-    * Permet de transformer le long representant le temps 
-    * en tableau de byte (taille: 8)
+    * Permet de transformer le long representant le temps en tableau de byte
+    * (taille: 8)
+    *
     * @param syncSent long a transformer
     * @return tableau de byte
     */
